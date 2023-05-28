@@ -30,31 +30,86 @@ parameters:
       - input: DstAddr
         output: DstK8S
         type: add_kubernetes
-      - input: SrcAddr
-        output: SrcK8S_Namespace
+      - input: DstAddr
         type: add_if
+        output: DstK8S_Namespace
+        parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
+        assignee: west
+      - input: DstAddr
+        type: add_if
+        output: DstK8S_Type
+        parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
+        assignee: Service
+      - input: DstAddr
+        type: add_if
+        output: DstK8S_Name
+        parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
+        assignee: west-gateway
+      - input: DstAddr
+        type: add_if
+        output: DstAddr
+        parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
+        assignee: "%WEST_GATEWAY_CLUSTER_IP%"
+      - input: DstAddr
+        type: add_if
+        output: DstK8S_Namespace
         parameters: =="%EAST_GATEWAY_EXTERNAL_IP%"
         assignee: east
-      - input: SrcAddr
-        output: SrcK8S_Namespace
+      - input: DstAddr
         type: add_if
+        output: DstK8S_Type
+        parameters: =="%EAST_GATEWAY_EXTERNAL_IP%"
+        assignee: Service
+      - input: DstAddr
+        type: add_if
+        output: DstK8S_Name
+        parameters: =="%EAST_GATEWAY_EXTERNAL_IP%"
+        assignee: east-gateway
+      - input: DstAddr
+        type: add_if
+        output: DstAddr
+        parameters: =="%EAST_GATEWAY_EXTERNAL_IP%"
+        assignee: "%EAST_GATEWAY_CLUSTER_IP%"
+      - input: SrcAddr
+        type: add_if
+        output: SrcK8S_Namespace
         parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
         assignee: west
       - input: SrcAddr
-        output: SrcK8S_Type
         type: add_if
+        output: SrcK8S_Type
         parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
         assignee: Service
       - input: SrcAddr
-        output: SrcK8S_Name
         type: add_if
+        output: SrcK8S_Name
         parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
         assignee: west-gateway
       - input: SrcAddr
-        output: SrcAddr
         type: add_if
+        output: SrcAddr
         parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
         assignee: "%WEST_GATEWAY_CLUSTER_IP%"
+      - input: SrcAddr
+        type: add_if
+        output: SrcK8S_Namespace
+        parameters: =="%EAST_GATEWAY_EXTERNAL_IP%"
+        assignee: east
+      - input: SrcAddr
+        type: add_if
+        output: SrcK8S_Type
+        parameters: =="%EAST_GATEWAY_EXTERNAL_IP%"
+        assignee: Service
+      - input: SrcAddr
+        type: add_if
+        output: SrcK8S_Name
+        parameters: =="%EAST_GATEWAY_EXTERNAL_IP%"
+        assignee: east-gateway
+      - input: SrcAddr
+        type: add_if
+        output: SrcAddr
+        parameters: =="%EAST_GATEWAY_EXTERNAL_IP%"
+        assignee: "%EAST_GATEWAY_CLUSTER_IP%"
       - type: reinterpret_direction
       directionInfo:
         reporterIPField: AgentIP
