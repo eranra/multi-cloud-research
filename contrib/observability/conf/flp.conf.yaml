@@ -30,20 +30,26 @@ parameters:
       - input: DstAddr
         output: DstK8S
         type: add_kubernetes
-      - input: DstAddr
-        output: DstSubnet
-        type: add_subnet
-        parameters: /24
-      - input: DstSubnet
-        output: SubnetName
-        type: add_label_if
-        parameters: %SUBNET1%
-        assignee: %SUBNET1NAME%
-      - input: DstSubnet
-        output: SubnetName
-        type: add_label_if
-        parameters: %SUBNET2%
-        assignee: %SUBNET2NAME%
+      - input: SrcAddr
+        output: SrcK8S_Namespace
+        type: add_if
+        parameters: =="%EAST_GATEWAY_IP%"
+        assignee: east
+      - input: SrcAddr
+        output: SrcK8S_Namespace
+        type: add_if
+        parameters: =="%WEST_GATEWAY_IP%"
+        assignee: west
+      - input: SrcAddr
+        output: SrcK8S_Type
+        type: add_if
+        parameters: =="%WEST_GATEWAY_IP%"
+        assignee: Service
+      - input: SrcAddr
+        output: SrcK8S_Name
+        type: add_if
+        parameters: =="%WEST_GATEWAY_IP%"
+        assignee: west-gateway
       - type: reinterpret_direction
       directionInfo:
         reporterIPField: AgentIP

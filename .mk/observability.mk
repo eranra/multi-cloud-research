@@ -89,13 +89,13 @@ undeploy-ebpf-agent:
 .PHONY: deploy-flp
 deploy-flp:
 	@echo -e "\n==> Deploy FLP\n"
-	$(eval WEST_INFO := $(shell kubectl get service skupper-router --context kind-west --no-headers=true | awk '{print $$4}' | sed 's|.$$$$|0|'))
-	$(eval EAST_INFO := $(shell kubectl get service skupper-router --context kind-east --no-headers=true | awk '{print $$4}' | sed 's|.$$$$|0|'))
-	echo $(EAST_INFO)
-	echo $(WEST_INFO)
+	$(eval EAST_GATEWAY_IP := $(shell kubectl get service skupper-router --context kind-east --no-headers=true | awk '{print $$4}' | sed 's|.$$$$|0|'))
+	$(eval WEST_GATEWAY_IP := $(shell kubectl get service skupper-router --context kind-west --no-headers=true | awk '{print $$4}' | sed 's|.$$$$|0|'))
+	@echo -e "\n=> East GW IP IS: "$(EAST_GATEWAY_IP)"\n"
+	@echo -e "\n=> West GW IP IS: "$(WEST_GATEWAY_IP)"\n"
 	sed 's|%DOCKER_IMG%|$(FLP_DOCKER_IMG)|g;s|%DOCKER_TAG%|$(FLP_DOCKER_TAG)|g' contrib/observability/deployment-flp.yaml > /tmp/deployment.yaml
 	export LOKI_URL=`cat /tmp/loki_url.addr`; \
-		sed 's|%LOKI_URL%|'$$LOKI_URL'|g; s|%SUBNET1%|$(EAST_INFO)|g; s|%SUBNET1NAME%|'subnet_east'|g; s|%SUBNET2%|$(WEST_INFO)|g; s|%SUBNET2NAME%|'subnet_west'|g' \
+		sed 's|%LOKI_URL%|'$$LOKI_URL'|g; s|%EAST_GATEWAY_IP%|$(EAST_GATEWAY_IP)|g; s|%WEST_GATEWAY_IP%|$(WEST_GATEWAY_IP)|g;' \
 	       	contrib/observability/conf/flp.conf.yaml > /tmp/flp.conf.yaml
 	kubectl create configmap flowlogs-pipeline-configuration --from-file=flowlogs-pipeline.conf.yaml=/tmp/flp.conf.yaml
 	kubectl apply -f /tmp/deployment.yaml
