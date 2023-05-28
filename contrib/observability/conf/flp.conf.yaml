@@ -33,23 +33,28 @@ parameters:
       - input: SrcAddr
         output: SrcK8S_Namespace
         type: add_if
-        parameters: =="%EAST_GATEWAY_IP%"
+        parameters: =="%EAST_GATEWAY_EXTERNAL_IP%"
         assignee: east
       - input: SrcAddr
         output: SrcK8S_Namespace
         type: add_if
-        parameters: =="%WEST_GATEWAY_IP%"
+        parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
         assignee: west
       - input: SrcAddr
         output: SrcK8S_Type
         type: add_if
-        parameters: =="%WEST_GATEWAY_IP%"
+        parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
         assignee: Service
       - input: SrcAddr
         output: SrcK8S_Name
         type: add_if
-        parameters: =="%WEST_GATEWAY_IP%"
+        parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
         assignee: west-gateway
+      - input: SrcAddr
+        output: SrcAddr
+        type: add_if
+        parameters: =="%WEST_GATEWAY_EXTERNAL_IP%"
+        assignee: "%WEST_GATEWAY_CLUSTER_IP%"
       - type: reinterpret_direction
       directionInfo:
         reporterIPField: AgentIP
